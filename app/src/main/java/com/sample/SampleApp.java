@@ -32,6 +32,7 @@ public class SampleApp extends Application {
         super.onCreate();
         PRDownloaderConfig config = PRDownloaderConfig.newBuilder()
                 .setDatabaseEnabled(true)
+                .setMaximumTread(1)
                 .build();
         PRDownloader.initialize(this, config);
     }

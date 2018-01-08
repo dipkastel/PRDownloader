@@ -30,6 +30,7 @@ public class PRDownloaderConfig {
     private String userAgent;
     private HttpClient httpClient;
     private boolean databaseEnabled;
+    private int MaximumThread;
 
     private PRDownloaderConfig(Builder builder) {
         this.readTimeout = builder.readTimeout;
@@ -37,6 +38,7 @@ public class PRDownloaderConfig {
         this.userAgent = builder.userAgent;
         this.httpClient = builder.httpClient;
         this.databaseEnabled = builder.databaseEnabled;
+        this.MaximumThread = builder.MaximumThread;
     }
 
     public int getReadTimeout() {
@@ -79,6 +81,13 @@ public class PRDownloaderConfig {
         this.databaseEnabled = databaseEnabled;
     }
 
+    public int getMaximumThread() {
+        return MaximumThread;
+    }
+
+    public void setMaximumThread(int maximumThread) {
+        MaximumThread = maximumThread;
+    }
     public static Builder newBuilder() {
         return new Builder();
     }
@@ -87,6 +96,7 @@ public class PRDownloaderConfig {
 
         int readTimeout = Constants.DEFAULT_READ_TIMEOUT_IN_MILLS;
         int connectTimeout = Constants.DEFAULT_CONNECT_TIMEOUT_IN_MILLS;
+        int MaximumThread = Constants.DEFAULT_Maximom_Thread;
         String userAgent = Constants.DEFAULT_USER_AGENT;
         HttpClient httpClient = new DefaultHttpClient();
         boolean databaseEnabled = false;
@@ -110,7 +120,10 @@ public class PRDownloaderConfig {
             this.httpClient = httpClient;
             return this;
         }
-
+        public Builder setMaximumTread(int Count) {
+            this.MaximumThread = Count;
+            return this;
+        }
         public Builder setDatabaseEnabled(boolean databaseEnabled) {
             this.databaseEnabled = databaseEnabled;
             return this;

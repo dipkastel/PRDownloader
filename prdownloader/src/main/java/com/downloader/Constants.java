@@ -35,6 +35,9 @@ public final class Constants {
     public static final int DEFAULT_READ_TIMEOUT_IN_MILLS = 20_000;
     public static final int DEFAULT_CONNECT_TIMEOUT_IN_MILLS = 20_000;
 
+    public static final int DEFAULT_Maximom_Thread = -1;
+    public static final int DEFAULT_Unlimite_Thread = -1;
+
     public static final int HTTP_RANGE_NOT_SATISFIABLE = 416;
     public static final int HTTP_TEMPORARY_REDIRECT = 307;
     public static final int HTTP_PERMANENT_REDIRECT = 308;

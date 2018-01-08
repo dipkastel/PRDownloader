@@ -18,6 +18,9 @@ package com.downloader.core;
 
 import android.os.Process;
 
+import com.downloader.Constants;
+import com.downloader.internal.ComponentHolder;
+
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -28,7 +31,10 @@ import java.util.concurrent.ThreadFactory;
 
 public class DefaultExecutorSupplier implements ExecutorSupplier {
 
-    private static final int DEFAULT_MAX_NUM_THREADS = 2 * Runtime.getRuntime().availableProcessors() + 1;
+    private static final int DEFAULT_MAX_NUM_THREADS =
+            (ComponentHolder.getInstance().getMaximumThrad()<= Constants.DEFAULT_Unlimite_Thread)?
+                    (2*Runtime.getRuntime().availableProcessors() + 1):
+                    ComponentHolder.getInstance().getMaximumThrad();
     private final DownloadExecutor networkExecutor;
     private final Executor backgroundExecutor;
     private final Executor mainThreadExecutor;

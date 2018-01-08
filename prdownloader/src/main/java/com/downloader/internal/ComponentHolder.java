@@ -35,6 +35,7 @@ public class ComponentHolder {
 
     private final static ComponentHolder INSTANCE = new ComponentHolder();
     private int readTimeout;
+    private int maximumThrad;
     private int connectTimeout;
     private String userAgent;
     private HttpClient httpClient;
@@ -48,6 +49,7 @@ public class ComponentHolder {
         this.readTimeout = config.getReadTimeout();
         this.connectTimeout = config.getConnectTimeout();
         this.userAgent = config.getUserAgent();
+        this.maximumThrad = config.getMaximumThread();
         this.httpClient = config.getHttpClient();
         this.dbHelper = config.isDatabaseEnabled() ? new AppDbHelper(context) : new NoOpsDbHelper();
         if (config.isDatabaseEnabled()) {
@@ -75,6 +77,10 @@ public class ComponentHolder {
             }
         }
         return connectTimeout;
+    }
+
+    public int getMaximumThrad() {
+        return maximumThrad;
     }
 
     public String getUserAgent() {
