@@ -31,6 +31,8 @@ public class PRDownloaderConfig {
     private HttpClient httpClient;
     private boolean databaseEnabled;
     private int MaximumThread;
+    private int cacheLimiteDays;
+
 
     private PRDownloaderConfig(Builder builder) {
         this.readTimeout = builder.readTimeout;
@@ -39,6 +41,7 @@ public class PRDownloaderConfig {
         this.httpClient = builder.httpClient;
         this.databaseEnabled = builder.databaseEnabled;
         this.MaximumThread = builder.MaximumThread;
+        this.cacheLimiteDays = builder.cacheLimiteDays;
     }
 
     public int getReadTimeout() {
@@ -85,6 +88,14 @@ public class PRDownloaderConfig {
         return MaximumThread;
     }
 
+    public int getCacheLimiteDays() {
+        return cacheLimiteDays;
+    }
+
+    public void setCacheLimiteDays(int cacheLimiteDays) {
+        this.cacheLimiteDays = cacheLimiteDays;
+    }
+
     public void setMaximumThread(int maximumThread) {
         MaximumThread = maximumThread;
     }
@@ -98,6 +109,7 @@ public class PRDownloaderConfig {
         int connectTimeout = Constants.DEFAULT_CONNECT_TIMEOUT_IN_MILLS;
         int MaximumThread = Constants.DEFAULT_Maximom_Thread;
         String userAgent = Constants.DEFAULT_USER_AGENT;
+        int cacheLimiteDays = Constants.DEFAULT_CACHE_LIMITE;
         HttpClient httpClient = new DefaultHttpClient();
         boolean databaseEnabled = false;
 
@@ -131,6 +143,11 @@ public class PRDownloaderConfig {
 
         public PRDownloaderConfig build() {
             return new PRDownloaderConfig(this);
+        }
+
+        public Builder deleteCacheAfter(int Day) {
+            this.cacheLimiteDays = Day;
+            return this;
         }
     }
 }

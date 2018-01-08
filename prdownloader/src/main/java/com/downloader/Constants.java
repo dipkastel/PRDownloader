@@ -42,4 +42,6 @@ public final class Constants {
     public static final int HTTP_TEMPORARY_REDIRECT = 307;
     public static final int HTTP_PERMANENT_REDIRECT = 308;
 
+    public static final int DEFAULT_CACHE_LIMITE = 30;
+
 }

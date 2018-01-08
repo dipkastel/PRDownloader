@@ -53,7 +53,7 @@ public class ComponentHolder {
         this.httpClient = config.getHttpClient();
         this.dbHelper = config.isDatabaseEnabled() ? new AppDbHelper(context) : new NoOpsDbHelper();
         if (config.isDatabaseEnabled()) {
-            PRDownloader.cleanUp(30);
+            PRDownloader.cleanUp(config.getCacheLimiteDays());
         }
     }
 
