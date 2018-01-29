@@ -33,6 +33,12 @@ import com.downloader.utils.Utils;
  * You must initialize this class before use. The simplest way is to just do
  * {#code PRDownloader.initialize(context)}.
  */
+
+/**
+ * PRDownloader entry point.
+ * You must initialize this class before use. The simplest way is to just do
+ * {#code PRDownloader.initialize(context)}.
+ */
 public class PRDownloader {
 
     /**
@@ -81,6 +87,12 @@ public class PRDownloader {
     public static void pause(int downloadId) {
         DownloadRequestQueue.getInstance().pause(downloadId);
     }
+    /**
+     * Method to pause all request
+     */
+//    public static void pauseAll() {
+//        DownloadRequestQueue.getInstance().pauseAll();
+//    }
 
     /**
      * Method to resume request with the given downloadId
@@ -89,6 +101,13 @@ public class PRDownloader {
      */
     public static void resume(int downloadId) {
         DownloadRequestQueue.getInstance().resume(downloadId);
+    }
+
+    /**
+     * Method to resume request with the given downloadId
+     */
+    public static void resumeAll() {
+        DownloadRequestQueue.getInstance().resumeAll();
     }
 
     /**

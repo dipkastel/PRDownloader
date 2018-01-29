@@ -16,6 +16,9 @@
 
 package com.downloader.internal;
 
+import android.util.Log;
+
+import com.downloader.Priority;
 import com.downloader.Status;
 import com.downloader.core.Core;
 import com.downloader.request.DownloadRequest;
@@ -64,6 +67,16 @@ public class DownloadRequestQueue {
             request.setStatus(Status.PAUSED);
         }
     }
+    public void pause() {
+        for (int key : currentRequestMap.keySet()) {
+            DownloadRequest request = currentRequestMap.get(key);
+            if (request.getStatus() == Status.RUNNING) {
+                request.setStatus(Status.TEMPORARY_PAUSE);
+            } else {
+                request.setStatus(Status.QUEUED);
+            }
+        }
+    }
 
     public void resume(int downloadId) {
         DownloadRequest request = currentRequestMap.get(downloadId);
@@ -73,6 +86,20 @@ public class DownloadRequestQueue {
                     .getExecutorSupplier()
                     .forDownloadTasks()
                     .submit(new DownloadRunnable(request)));
+        }
+    }
+
+    public void resumeAll() {
+
+        for (int key : currentRequestMap.keySet()) {
+            DownloadRequest request = currentRequestMap.get(key);
+            if (request != null) {
+                request.setStatus(Status.QUEUED);
+                request.setFuture(Core.getInstance()
+                        .getExecutorSupplier()
+                        .forDownloadTasks()
+                        .submit(new DownloadRunnable(request)));
+            }
         }
     }
 
@@ -119,6 +146,10 @@ public class DownloadRequestQueue {
     }
 
     public void addRequest(DownloadRequest request) {
+
+        if (request.getPriority() == Priority.IMMEDIATE) {
+            pause();
+        }
         currentRequestMap.put(request.getDownloadId(), request);
         request.setStatus(Status.QUEUED);
         request.setSequenceNumber(getSequenceNumber());
@@ -126,6 +157,8 @@ public class DownloadRequestQueue {
                 .getExecutorSupplier()
                 .forDownloadTasks()
                 .submit(new DownloadRunnable(request)));
+
+
     }
 
     public void finish(DownloadRequest request) {

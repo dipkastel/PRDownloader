@@ -16,6 +16,8 @@
 
 package com.downloader.internal;
 
+import android.util.Log;
+
 import com.downloader.Constants;
 import com.downloader.Error;
 import com.downloader.Progress;
@@ -36,6 +38,7 @@ import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.io.SyncFailedException;
 import java.net.HttpURLConnection;
+import java.time.Year;
 
 /**
  * Created by amitshekhar on 13/11/17.
@@ -189,6 +192,7 @@ public class DownloadTask {
 
             do {
 
+
                 final int byteCount = inputStream.read(buff);
 
                 if (byteCount == -1) {
@@ -198,6 +202,9 @@ public class DownloadTask {
                 outputStream.write(buff, 0, byteCount);
 
                 request.setDownloadedBytes(request.getDownloadedBytes() + byteCount);
+
+
+                Log.e("Downloding Byte : ",String.valueOf(request.getDownloadedBytes()));
 
                 sendProgress();
 
@@ -209,6 +216,10 @@ public class DownloadTask {
                 } else if (request.getStatus() == Status.PAUSED) {
                     sync(outputStream, fileDescriptor);
                     response.setPaused(true);
+                    return response;
+                }else if(request.getStatus() == Status.TEMPORARY_PAUSE){
+                    sync(outputStream, fileDescriptor);
+                    response.setTemporaryPaused(true);
                     return response;
                 }
 
@@ -231,7 +242,9 @@ public class DownloadTask {
             Error error = new Error();
             error.setConnectionError(true);
             response.setError(error);
-        } finally {
+        }
+
+        finally {
             closeAllSafely(outputStream, fileDescriptor);
         }
 

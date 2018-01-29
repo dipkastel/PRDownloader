@@ -26,7 +26,6 @@ import com.downloader.PRDownloaderConfig;
  */
 
 public class SampleApp extends Application {
-
     @Override
     public void onCreate() {
         super.onCreate();

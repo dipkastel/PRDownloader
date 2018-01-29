@@ -47,6 +47,8 @@ public class DownloadRunnable implements Runnable {
             request.deliverSuccess();
         } else if (response.isPaused()) {
             request.deliverPauseEvent();
+        } else if (response.isTemporaryPaused()) {
+            request.deliverTemporaryPauseEvent(request);
         } else if (response.getError() != null) {
             request.deliverError(response.getError());
         } else if (!response.isCancelled()) {

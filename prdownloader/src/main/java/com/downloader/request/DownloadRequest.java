@@ -16,19 +16,21 @@
 
 package com.downloader.request;
 
-import com.downloader.Error;
+
+
 import com.downloader.OnCancelListener;
 import com.downloader.OnDownloadListener;
 import com.downloader.OnPauseListener;
 import com.downloader.OnProgressListener;
 import com.downloader.OnStartOrResumeListener;
+import com.downloader.PRDownloader;
 import com.downloader.Priority;
 import com.downloader.Status;
 import com.downloader.core.Core;
 import com.downloader.internal.ComponentHolder;
 import com.downloader.internal.DownloadRequestQueue;
 import com.downloader.utils.Utils;
-
+import com.downloader.Error;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Future;
@@ -56,6 +58,9 @@ public class DownloadRequest {
     private OnStartOrResumeListener onStartOrResumeListener;
     private OnPauseListener onPauseListener;
     private OnCancelListener onCancelListener;
+    private static boolean IsForceExist = false;
+    private boolean IsThisForce = false;
+    private int ForceDownloadId;
     private int downloadId;
     private HashMap<String, List<String>> headerMap;
     private Status status;
@@ -82,8 +87,9 @@ public class DownloadRequest {
         return priority;
     }
 
-    public void setPriority(Priority priority) {
+    public DownloadRequest setPriority(Priority priority) {
         this.priority = priority;
+        return this;
     }
 
     public Object getTag() {
@@ -224,11 +230,26 @@ public class DownloadRequest {
     public int start(OnDownloadListener onDownloadListener) {
         this.onDownloadListener = onDownloadListener;
         downloadId = Utils.getUniqueId(url, dirPath, fileName);
-        DownloadRequestQueue.getInstance().addRequest(this);
-        return downloadId;
+            DownloadRequestQueue.getInstance().addRequest(this);
+            return downloadId;
+
     }
 
     public void deliverError(final Error error) {
+        if (status != Status.CANCELLED) {
+            Core.getInstance().getExecutorSupplier().forMainThreadTasks()
+                    .execute(new Runnable() {
+                        public void run() {
+                            if (onDownloadListener != null) {
+                                onDownloadListener.onError(error);
+                            }
+                            finish();
+                        }
+                    });
+        }
+    }
+
+    public void deliver(final Error error) {
         if (status != Status.CANCELLED) {
             Core.getInstance().getExecutorSupplier().forMainThreadTasks()
                     .execute(new Runnable() {
@@ -271,18 +292,32 @@ public class DownloadRequest {
     }
 
     public void deliverPauseEvent() {
+
         if (status != Status.CANCELLED) {
             Core.getInstance().getExecutorSupplier().forMainThreadTasks()
                     .execute(new Runnable() {
                         public void run() {
                             if (onPauseListener != null) {
                                 onPauseListener.onPause();
+
                             }
                         }
                     });
         }
     }
 
+    public void deliverTemporaryPauseEvent(final DownloadRequest request) {
+
+        if (status != Status.CANCELLED) {
+            Core.getInstance().getExecutorSupplier().forMainThreadTasks()
+                    .execute(new Runnable() {
+                        public void run() {
+                           DownloadRequestQueue.getInstance().resume(request.downloadId);
+                        }
+                    });
+
+        }
+    }
     private void deliverCancelEvent() {
         Core.getInstance().getExecutorSupplier().forMainThreadTasks()
                 .execute(new Runnable() {

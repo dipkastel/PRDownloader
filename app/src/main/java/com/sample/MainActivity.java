@@ -32,6 +32,7 @@ import com.downloader.OnPauseListener;
 import com.downloader.OnProgressListener;
 import com.downloader.OnStartOrResumeListener;
 import com.downloader.PRDownloader;
+import com.downloader.Priority;
 import com.downloader.Progress;
 import com.downloader.Status;
 import com.sample.utils.Utils;
@@ -1442,6 +1443,7 @@ public class MainActivity extends AppCompatActivity {
                                 textViewProgressFifteen.setText(Utils.getProgressDisplayLine(progress.currentBytes, progress.totalBytes));
                             }
                         })
+                        .setPriority(Priority.IMMEDIATE)
                         .start(new OnDownloadListener() {
                             @Override
                             public void onDownloadComplete() {

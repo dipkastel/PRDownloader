@@ -27,6 +27,16 @@ public class Response {
     private boolean isPaused;
     private boolean isCancelled;
 
+    public boolean isTemporaryPaused() {
+        return isTemporaryPaused;
+    }
+
+    public void setTemporaryPaused(boolean temporaryPaused) {
+        isTemporaryPaused = temporaryPaused;
+    }
+
+    private boolean isTemporaryPaused;
+
     public Error getError() {
         return error;
     }

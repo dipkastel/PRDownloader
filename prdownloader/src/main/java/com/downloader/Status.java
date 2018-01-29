@@ -32,6 +32,8 @@ public enum Status {
 
     CANCELLED,
 
-    UNKNOWN
+    UNKNOWN,
+
+    TEMPORARY_PAUSE
 
 }
