@@ -47,6 +47,8 @@ PRDownloader.initialize(getApplicationContext(), config);
 PRDownloaderConfig config = PRDownloaderConfig.newBuilder()
                 .setReadTimeout(30_000)
                 .setConnectTimeout(30_000)
+                .setMaximumTread(1)
+                .deleteCacheAfter(10)
                 .build();
 PRDownloader.initialize(getApplicationContext(), config); 
 ```
